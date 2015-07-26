@@ -5,8 +5,16 @@
 
 (defproject example-project
   "Clatch example project"
-  (backdrops
-    :backdrop1 "backdrops/moon.png"))
+  (stage
+    (backdrops
+      :moon  "backdrops/moon.png"
+      :stars "backdrops/stars.png")
+    (scripts
+      (when-start
+        (switch-backdrop-to :moon)
+        (forever
+          (next-backdrop)
+          (wait-seconds 1.5))))))
 
 (defn -main []
   (start example-project))

@@ -15,3 +15,5 @@ rubygems/
 .externalToolBuilders/
 *.log
 bin/
+.lein-repl-history
+.nrepl-port

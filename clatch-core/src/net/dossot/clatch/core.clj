@@ -1,5 +1,6 @@
 (ns net.dossot.clatch.core
-  (:require [play-clj.core :refer [defscreen* defgame*
+  (:require [net.dossot.clatch.spec :as spec]
+            [play-clj.core :refer [defscreen* defgame*
                                    stage
                                    clear! update! render! set-screen!]]
             [play-clj.g2d :refer [texture]]))
@@ -74,6 +75,7 @@
 
 (defn specs->game
   [specs]
+  ;; TODO ensure only one stage
   (let [main-screen (specs->screen specs)]
     (defgame*
       {:on-create
@@ -85,9 +87,10 @@
 
 (defmacro defproject
   "Defines a Clatch project. This should only be called once."
-  [name description & specs]
+  [name description & project]
   {:pre [(symbol? name)
          (string? description)]}
+  (spec/validate-project project)
   `(defonce ~name
-     {:game (specs->game '~specs)
+     {:game (specs->game '~project)
       :description ~description}))

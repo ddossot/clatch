@@ -6,9 +6,6 @@
 (defn start
   "Runs a Clatch project on a good ol' computer."
   [project]
-  (println
-    "Starting project:"
-    (:description project))
   (LwjglApplication.
     (:game project)
     (:description project)

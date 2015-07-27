@@ -3,7 +3,8 @@
             [play-clj.core :refer [defscreen* defgame*
                                    stage
                                    clear! update! render! set-screen!]]
-            [play-clj.g2d :refer [texture]]))
+            [play-clj.g2d :refer [texture]])
+  (:import  [com.badlogic.gdx.utils Logger]))
 
 (defn- skip-render?
   [screen entity]
@@ -48,21 +49,28 @@
     []
     specs))
 
+(defn- log-info
+  [screen & msgs]
+  (.info
+    (get-in screen [:clatch :logger])
+    (apply str msgs)))
+
 (defn- specs->screen
   [specs]
   (defscreen* (atom {}) (atom [])
     {:on-show
-     (fn [screen entities]
-       (let [backdrops (collect-backdrops specs)
+     (fn [screen0 entities]
+       (let [logger (Logger. "clatch.core" Logger/INFO)
+             backdrops (collect-backdrops specs)
              backdrop (get-in
                         (first backdrops)
-                        [:clatch :id])]
-         (println
-           "Initial backdrop:"
-           backdrop)
-         (update! screen
-                  :renderer (stage)
-                  :clatch {:active-backdrop backdrop})
+                        [:clatch :id])
+             screen (update! screen0
+                             :renderer (stage)
+                             :clatch {:logger logger
+                                      :active-backdrop backdrop})]
+         (log-info screen
+                   "Initial backdrop: " backdrop)
          (vec backdrops)))
 
      :on-render
@@ -75,7 +83,6 @@
 
 (defn specs->game
   [specs]
-  ;; TODO ensure only one stage
   (let [main-screen (specs->screen specs)]
     (defgame*
       {:on-create

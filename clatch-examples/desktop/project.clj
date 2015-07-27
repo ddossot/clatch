@@ -1,4 +1,4 @@
-(def gdx-version "1.6.0")
+(def gdx-version "1.6.4")
 
 (defproject net.dossot.clatch/clatch-desktop-example "1.0.0-SNAPSHOT"
   :description "Clatch desktop example."

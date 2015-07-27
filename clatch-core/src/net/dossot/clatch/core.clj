@@ -1,10 +1,25 @@
 (ns net.dossot.clatch.core
-  (:require [net.dossot.clatch.spec :as spec]
+  (:require [clojure.string :as str]
+            [net.dossot.clatch.spec :as spec]
             [play-clj.core :refer [defscreen* defgame*
                                    stage
                                    clear! update! render! set-screen!]]
             [play-clj.g2d :refer [texture]])
   (:import  [com.badlogic.gdx.utils Logger]))
+
+(defn- get-form
+  [forms sym]
+  (rest
+    (first
+      (filter
+        #(= (first %) sym)
+        forms))))
+
+(defn- log-info
+  [screen & msgs]
+  (.info
+    (get-in screen [:clatch :logger])
+    (str/join " " msgs)))
 
 (defn- skip-render?
   [screen entity]
@@ -38,30 +53,19 @@
     (partition 2 backdrops)))
 
 (defn- collect-backdrops
-  [specs]
-  (reduce
-    (fn -backdrop-collector
-      [acc [sym & args]]
-      (if
-        (= sym 'backdrops)
-        (concat acc (backdrops->tex args))
-        acc))
-    []
-    specs))
+  [stage]
+  (when-let [backdrops (get-form stage 'backdrops)]
+    (backdrops->tex
+      backdrops)))
 
-(defn- log-info
-  [screen & msgs]
-  (.info
-    (get-in screen [:clatch :logger])
-    (apply str msgs)))
-
-(defn- specs->screen
-  [specs]
+(defn- project->screen
+  [project]
   (defscreen* (atom {}) (atom [])
     {:on-show
      (fn [screen0 entities]
        (let [logger (Logger. "clatch.core" Logger/INFO)
-             backdrops (collect-backdrops specs)
+             project-stage (get-form project 'stage)
+             backdrops (collect-backdrops project-stage)
              backdrop (get-in
                         (first backdrops)
                         [:clatch :id])
@@ -70,7 +74,7 @@
                              :clatch {:logger logger
                                       :active-backdrop backdrop})]
          (log-info screen
-                   "Initial backdrop: " backdrop)
+                   "Initial backdrop:" backdrop)
          (vec backdrops)))
 
      :on-render
@@ -81,9 +85,9 @@
          (renderable-entities screen entities))
        entities)}))
 
-(defn specs->game
-  [specs]
-  (let [main-screen (specs->screen specs)]
+(defn project->game
+  [project]
+  (let [main-screen (project->screen project)]
     (defgame*
       {:on-create
        (fn -game-on-create
@@ -99,5 +103,5 @@
          (string? description)]}
   (spec/validate-project project)
   `(defonce ~name
-     {:game (specs->game '~project)
+     {:game (project->game '~project)
       :description ~description}))

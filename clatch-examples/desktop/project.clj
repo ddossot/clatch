@@ -21,5 +21,5 @@
    [net.dossot.clatch/clatch-core :version]
   ]
 
-  :aot [net.dossot.clatch.desktop-example.core]
-  :main net.dossot.clatch.desktop-example.core)
+  :aot [clatch.desktop-example.core]
+  :main clatch.desktop-example.core)

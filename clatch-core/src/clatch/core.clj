@@ -1,6 +1,6 @@
-(ns net.dossot.clatch.core
+(ns clatch.core
   (:require [clojure.string :as str]
-            [net.dossot.clatch.spec :as spec]
+            [clatch.spec :as spec]
             [play-clj.core :refer [defscreen* defgame*
                                    stage
                                    clear! update! render! set-screen!]]
@@ -59,7 +59,7 @@
       backdrops)))
 
 (defn- project->screen
-  [project]
+  [project boot-fn]
   (defscreen* (atom {}) (atom [])
     {:on-show
      (fn [screen0 entities]
@@ -75,6 +75,9 @@
                                       :active-backdrop backdrop})]
          (log-info screen
                    "Initial backdrop:" backdrop)
+         (log-info screen
+                   "Booting application")
+         (boot-fn screen)
          (vec backdrops)))
 
      :on-render
@@ -86,8 +89,8 @@
        entities)}))
 
 (defn project->game
-  [project]
-  (let [main-screen (project->screen project)]
+  [project boot-fn]
+  (let [main-screen (project->screen project boot-fn)]
     (defgame*
       {:on-create
        (fn -game-on-create
@@ -96,12 +99,21 @@
 
 ;; TODO add support for sprites, scripts (including aliases like: forever, repeat-until...)
 
+(defn emit-boot-fn
+  [project]
+  `(fn -boot-fn [screen#]
+     ;; TODO generate real fn out of backdrop/sprite scripts
+     (println
+       "emitted boot-fn project:" '~project
+       "screen:" screen#)))
+
 (defmacro defproject
   "Defines a Clatch project. This should only be called once."
   [name description & project]
   {:pre [(symbol? name)
          (string? description)]}
   (spec/validate-project project)
-  `(defonce ~name
-     {:game (project->game '~project)
-      :description ~description}))
+  `(let [boot-fn# ~(emit-boot-fn project)]
+     (defonce ~name
+       {:game (project->game '~project boot-fn#)
+        :description ~description})))

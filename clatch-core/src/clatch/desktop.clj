@@ -1,4 +1,4 @@
-(ns net.dossot.clatch.desktop
+(ns clatch.desktop
   (:import  [com.badlogic.gdx Game]
             [com.badlogic.gdx.backends.lwjgl LwjglApplication]
             [org.lwjgl.input Keyboard]))

@@ -1,4 +1,4 @@
-(ns net.dossot.clatch.spec
+(ns clatch.spec
   (:require [schema.core :as s]))
 
 (def Backdrops

@@ -32,5 +32,14 @@ To provide a transition path between Scratch and a general programming language.
 - Because [Nightmod](https://github.com/oakes/Nightmod) can deliver a Scratch-like programming experience.
 
 
+## Contributions welcome!
+
+Help with the following would be great:
+
+- more support of core Scratch features,
+- Leiningen template,
+- Nightmod template.
+
+
 > Copyright © 2015 David Dossot - MIT License.
 > Media files come from https://github.com/LLK/Scratch_1.4 and are licensed under the Creative Commons Attribution-ShareAlike 3.0 Generic (CC BY-SA 3.0) license.

@@ -21,6 +21,14 @@
     (get-in screen [:clatch :logger])
     (str/join " " msgs)))
 
+(defn project->boot-fn
+  [project]
+  (let [project-stage (get-form project 'stage)
+        stage-scripts (get-form project-stage 'scripts)]
+    `(fn -boot-fn [_#]
+       (do
+         ~@stage-scripts))))
+
 (defn- skip-render?
   [screen entity]
   (let [{{active-backdrop :active-backdrop} :clatch} screen
@@ -77,11 +85,15 @@
                    "Initial backdrop:" backdrop)
          (log-info screen
                    "Booting application")
-         (boot-fn screen)
+         ;; TODO nil should be a ref to agent/messaging system
+         ;; use to send messages to stage/sprites
+         (boot-fn nil)
          (vec backdrops)))
 
      :on-render
      (fn [screen entities]
+       ;; TODO consume messages sent to the stage agent
+       ;; inbox and perform related state transitions
        (clear!)
        (render!
          screen
@@ -99,21 +111,13 @@
 
 ;; TODO add support for sprites, scripts (including aliases like: forever, repeat-until...)
 
-(defn emit-boot-fn
-  [project]
-  `(fn -boot-fn [screen#]
-     ;; TODO generate real fn out of backdrop/sprite scripts
-     (println
-       "emitted boot-fn project:" '~project
-       "screen:" screen#)))
-
 (defmacro defproject
   "Defines a Clatch project. This should only be called once."
   [name description & project]
   {:pre [(symbol? name)
          (string? description)]}
   (spec/validate-project project)
-  `(let [boot-fn# ~(emit-boot-fn project)]
+  `(let [boot-fn# ~(project->boot-fn project)]
      (defonce ~name
        {:game (project->game '~project boot-fn#)
         :description ~description})))

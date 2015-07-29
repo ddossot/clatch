@@ -1,6 +1,8 @@
 (ns clatch.desktop-example.core
   (:require [clatch.core :refer [defproject]]
-            [clatch.events :refer [when-start]]
+            [clatch.events :refer :all]
+            [clatch.looks :refer :all]
+            [clatch.control :refer :all]
             [clatch.desktop :refer [start]])
   (:gen-class))
 

@@ -36,3 +36,14 @@
   @(s/try-take!
      stage-stream
      0))
+
+(defn next-in-cyclic-list
+  [haystack needle]
+  (loop [hs haystack]
+    (let [head (first hs)]
+      (cond
+        (nil? head) nil
+        (= head needle) (if-let [next (second hs)]
+                          next
+                          (first haystack))
+        :else (recur (rest hs))))))

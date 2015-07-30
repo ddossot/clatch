@@ -3,8 +3,8 @@
 (defmacro forever
   ;; TODO doc
   [& forms]
-  (while true
-    ~@forms))
+  `(while true
+     ~@forms))
 
 (defn wait-seconds
   ;; TODO doc

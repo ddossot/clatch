@@ -7,6 +7,8 @@
 
   :plugins [[lein-modules "0.3.11"]]
 
+  :modules {:dirs ["clatch-core" "clatch-examples/desktop"]}
+
   :profiles {:provided {:dependencies [[org.clojure/clojure "1.7.0"]]}
              :dev {:plugins [[lein-kibit "0.1.2"]
                              [jonase/eastwood "0.2.1"]]}})

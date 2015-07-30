@@ -5,6 +5,4 @@
    Equivalent to Scratch's green flag clicked event."
   [& forms]
   ;; TODO implement me :)
-  (println
-    "when-start:"
-    forms))
+  `(future ~@forms))

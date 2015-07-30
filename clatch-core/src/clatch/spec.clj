@@ -6,7 +6,15 @@
    (s/either s/Keyword s/Str)])
 
 (def Script
-  [(s/one s/Symbol "symbol")
+  [(s/one (s/enum
+            'when-start
+            'when-key-pressed
+            'when-this-sprite-clicked
+            'when-backdrop-switches-to
+            'when-timer>
+            ;; TODO consider when-loudness when-video-motion
+            'when-i-receive)
+     "script event")
    s/Any])
 
 (def Scripts

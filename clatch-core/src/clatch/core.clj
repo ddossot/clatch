@@ -1,19 +1,16 @@
 (ns clatch.core
   (:require [clojure.string :as str]
             [clatch.spec :as spec]
+            [clatch.utils :refer :all]
             [play-clj.core :refer [defscreen* defgame*
                                    stage
                                    clear! update! render! set-screen!]]
-            [play-clj.g2d :refer [texture]])
+            [play-clj.g2d :refer [texture]]
+            [manifold.bus :as b]
+            [manifold.stream :as s])
   (:import  [com.badlogic.gdx.utils Logger]))
 
-(defn- get-form
-  [forms sym]
-  (rest
-    (first
-      (filter
-        #(= (first %) sym)
-        forms))))
+(defonce ^:private default-stream-size 16)
 
 (defn- log-info
   [screen & msgs]
@@ -25,13 +22,14 @@
   [project]
   (let [project-stage (get-form project 'stage)
         stage-scripts (get-form project-stage 'scripts)]
-    `(fn -boot-fn [_#]
+    (println "stage-scripts:" stage-scripts)
+    `(fn -boot-fn [event-bus#]
        (do
          ~@stage-scripts))))
 
 (defn- skip-render?
   [screen entity]
-  (let [{{active-backdrop :active-backdrop} :clatch} screen
+  (let [{{{active-backdrop :active-backdrop} :stage} :clatch} screen
         {{entity-type :type entity-id :id} :clatch} entity]
     (cond
       (and (= entity-type :backdrop) (not= entity-id active-backdrop)) true
@@ -72,28 +70,33 @@
     {:on-show
      (fn [screen0 entities]
        (let [logger (Logger. "clatch.core" Logger/INFO)
+             event-bus (b/event-bus)
+             stage-stream (s/stream default-stream-size)
              project-stage (get-form project 'stage)
              backdrops (collect-backdrops project-stage)
-             backdrop (get-in
-                        (first backdrops)
-                        [:clatch :id])
+             backdrop-ids (map
+                            #(get-in % [:clatch :id])
+                            backdrops)
+             active-backdrop (first backdrop-ids)
              screen (update! screen0
                              :renderer (stage)
                              :clatch {:logger logger
-                                      :active-backdrop backdrop})]
+                                      :stage {:active-backdrop active-backdrop
+                                              :backdrop-ids backdrop-ids}})]
          (log-info screen
-                   "Initial backdrop:" backdrop)
+           "Loaded backdrop IDs:" (pr-str backdrop-ids)
+           "- Initial backdrop ID:" active-backdrop)
+         (s/connect
+           (b/subscribe event-bus :stage)
+           stage-stream)
          (log-info screen
-                   "Booting application")
-         ;; TODO nil should be a ref to agent/messaging system
-         ;; use to send messages to stage/sprites
-         (boot-fn nil)
+           "Booting application")
+         (boot-fn event-bus)
          (vec backdrops)))
 
      :on-render
      (fn [screen entities]
-       ;; TODO consume messages sent to the stage agent
-       ;; inbox and perform related state transitions
+       ;; TODO consume messages sent to the stage-stream
        (clear!)
        (render!
          screen

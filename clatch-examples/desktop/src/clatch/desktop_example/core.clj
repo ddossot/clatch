@@ -16,8 +16,8 @@
       (when-start
         (switch-backdrop-to :moon)
         (forever
-          (next-backdrop)
-          (wait-seconds 1.5))))))
+          (wait-seconds 1.5)
+          (next-backdrop))))))
 
 (defn -main []
   (start example-project))

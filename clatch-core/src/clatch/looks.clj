@@ -1,14 +1,17 @@
-(ns clatch.looks)
+(ns clatch.looks
+  (:require [clatch.utils :refer [publish-to-stage!]]))
 
-(defn switch-backdrop-to
+(defmacro switch-backdrop-to
   ;; TODO doc
   [backdrop-id]
   {:pre [(keyword? backdrop-id)]}
-  ;; TODO implement me
-  (println "BD->" backdrop-id))
+  `(publish-to-stage!
+     ~'event-bus
+     [:switch-backdrop-to ~backdrop-id]))
 
-(defn next-backdrop
+(defmacro next-backdrop
   ;; TODO doc
   []
-  ;; TODO implement me
-  (println "next BD"))
+  `(publish-to-stage!
+     ~'event-bus
+     [:next-backdrop]))

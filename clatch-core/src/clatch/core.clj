@@ -12,7 +12,13 @@
   [screen & msgs]
   (.info
     (get-in screen [:clatch :logger])
-    (str/join " " msgs)))
+    (str/join " " (cons "INFO" msgs))))
+
+(defn- log-error
+  [screen & msgs]
+  (.error
+    (get-in screen [:clatch :logger])
+    (str/join " " (cons "ERROR" msgs))))
 
 (defn project->boot-fn
   [project]
@@ -61,11 +67,31 @@
 
 (defn- stage-tick
   [screen]
-  (let [{{{stage-stream :stream} :stage} :clatch} screen]
-    (when-let [stage-message (pop-stage-message! stage-stream)]
-      ;; TODO mutate screen state
-      (println "stage message:" stage-message))
-    screen))
+  (let [clatch-screen (:clatch screen)
+        {{active-backdrop :active-backdrop
+          backdrop-ids :backdrop-ids
+          stage-stream :stream} :stage} clatch-screen]
+    (if-let [{action :action args :args} (pop-stage-message! stage-stream)]
+      (case action
+        :switch-backdrop-to (update! screen
+                              :clatch (assoc-in
+                                        clatch-screen
+                                        [:stage :active-backdrop]
+                                        args))
+        :next-backdrop (update! screen
+                         :clatch (assoc-in
+                                   clatch-screen
+                                   [:stage :active-backdrop]
+                                   (next-in-cyclic-list
+                                     backdrop-ids
+                                     active-backdrop)))
+        (do
+          (log-error screen
+            "Ignoring unknown stage message"
+            "action:" action
+            "args:" args)
+          screen))
+      screen)))
 
 (defn- project->screen
   [project boot-fn]

@@ -7,11 +7,12 @@
   {:pre [(keyword? backdrop-id)]}
   `(publish-to-stage!
      ~'event-bus
-     [:switch-backdrop-to ~backdrop-id]))
+     {:action :switch-backdrop-to
+      :args ~backdrop-id}))
 
 (defmacro next-backdrop
   ;; TODO doc
   []
   `(publish-to-stage!
      ~'event-bus
-     [:next-backdrop]))
+     {:action :next-backdrop}))

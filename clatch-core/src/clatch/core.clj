@@ -140,7 +140,7 @@
          [this]
          (set-screen! this main-screen))})))
 
-;; TODO add support for sprites, scripts (including aliases like: forever, repeat-until...)
+;; TODO add support for variables, sprites, scripts (including aliases like: forever, repeat-until...)
 
 (defmacro defproject
   "Defines a Clatch project. This should only be called once."

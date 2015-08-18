@@ -1,5 +1,3 @@
-(def gdx-version "1.6.4")
-
 (defproject net.dossot.clatch/clatch-desktop-example "1.0.0-SNAPSHOT"
   :description "Clatch desktop example."
   :url "https://www.github.com/ddossot/clatch"
@@ -11,14 +9,13 @@
 
   :dependencies
   [
-   [com.badlogicgames.gdx/gdx ~gdx-version]
-   [com.badlogicgames.gdx/gdx-backend-lwjgl ~gdx-version]
-   [com.badlogicgames.gdx/gdx-box2d ~gdx-version]
-   [com.badlogicgames.gdx/gdx-box2d-platform ~gdx-version :classifier "natives-desktop"]
-   [com.badlogicgames.gdx/gdx-bullet ~gdx-version]
-   [com.badlogicgames.gdx/gdx-bullet-platform ~gdx-version :classifier "natives-desktop"]
-   [com.badlogicgames.gdx/gdx-platform ~gdx-version :classifier "natives-desktop"]
-   [net.dossot.clatch/clatch-core :version]
+   [com.badlogicgames.gdx/gdx :gdx-version]
+   [com.badlogicgames.gdx/gdx-backend-lwjgl :gdx-version]
+   [com.badlogicgames.gdx/gdx-box2d :gdx-version]
+   [com.badlogicgames.gdx/gdx-box2d-platform :gdx-version :classifier "natives-desktop"]
+   [com.badlogicgames.gdx/gdx-bullet :gdx-version]
+   [com.badlogicgames.gdx/gdx-bullet-platform :gdx-version :classifier "natives-desktop"]
+   [com.badlogicgames.gdx/gdx-platform :gdx-version :classifier "natives-desktop"]
   ]
 
   :aot [clatch.desktop-example.core]

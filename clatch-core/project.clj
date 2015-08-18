@@ -7,6 +7,9 @@
 
   :plugins [[lein-modules "0.3.11"]]
 
+  :profiles {:dev {:dependencies [[com.badlogicgames.gdx/gdx-backend-lwjgl :gdx-version]]
+                   :eastwood {:config-files ["eastwood-config.clj"]}}}
+
   :dependencies
   [
    [prismatic/schema "0.4.3"]

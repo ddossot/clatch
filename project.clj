@@ -7,8 +7,8 @@
 
   :plugins [[lein-modules "0.3.11"]]
 
-  :modules {:versions {:gdx-version "1.6.4"}}
+  :modules {:versions {:clj-version "1.7.0"
+                       :gdx-version "1.6.4"}}
 
-  :profiles {:provided {:dependencies [[org.clojure/clojure "1.7.0"]]}
-             :dev {:plugins [[lein-kibit "0.1.2"]
+  :profiles {:dev {:plugins [[lein-kibit "0.1.2"]
                              [jonase/eastwood "0.2.1"]]}})

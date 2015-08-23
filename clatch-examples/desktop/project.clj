@@ -9,6 +9,9 @@
 
   :dependencies
   [
+   [org.clojure/clojure :clj-version]
+   [net.dossot.clatch/clatch-core :version]
+
    [com.badlogicgames.gdx/gdx :gdx-version]
    [com.badlogicgames.gdx/gdx-backend-lwjgl :gdx-version]
    [com.badlogicgames.gdx/gdx-box2d :gdx-version]

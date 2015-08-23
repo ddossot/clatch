@@ -12,7 +12,9 @@
 
   :dependencies
   [
+   [org.clojure/clojure :clj-version]
+   
+   [play-clj "0.4.7" :exclusions [com.badlogicgames.gdx/gdx]]
    [prismatic/schema "0.4.3"]
-   [play-clj "0.4.7"]
    [manifold "0.1.1-alpha3"]
   ])

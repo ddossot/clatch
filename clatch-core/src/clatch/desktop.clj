@@ -3,7 +3,7 @@
             [com.badlogic.gdx.backends.lwjgl LwjglApplication]
             [org.lwjgl.input Keyboard]))
 
-(defn start
+(defn start-on-desktop
   "Runs a Clatch project on a good ol' computer."
   [project]
   (LwjglApplication.

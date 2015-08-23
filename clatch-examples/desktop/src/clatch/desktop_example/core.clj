@@ -1,9 +1,5 @@
 (ns clatch.desktop-example.core
-  (:require [clatch.core :refer [defproject]]
-            [clatch.events :refer :all]
-            [clatch.looks :refer :all]
-            [clatch.control :refer :all]
-            [clatch.desktop :refer [start]])
+  (:require [clatch :refer :all])
   (:gen-class))
 
 (defproject example-project
@@ -20,4 +16,4 @@
           (next-backdrop))))))
 
 (defn -main []
-  (start example-project))
+  (start-on-desktop example-project))

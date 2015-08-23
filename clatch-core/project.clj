@@ -8,13 +8,15 @@
   :plugins [[lein-modules "0.3.11"]]
 
   :profiles {:dev {:dependencies [[com.badlogicgames.gdx/gdx-backend-lwjgl :gdx-version]]
-                   :eastwood {:config-files ["eastwood-config.clj"]}}}
+                   :eastwood {:exclude-namespaces [clatch]
+                              :config-files ["eastwood-config.clj"]}}}
 
   :dependencies
   [
    [org.clojure/clojure :clj-version]
-   
+
    [play-clj "0.4.7" :exclusions [com.badlogicgames.gdx/gdx]]
    [prismatic/schema "0.4.3"]
    [manifold "0.1.1-alpha3"]
+   [potemkin "0.4.1"]
   ])

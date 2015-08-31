@@ -14,6 +14,8 @@
                       `--'  `"   `'-'                  '---'   '---' 
 </pre>
 
+[![Build Status](https://travis-ci.org/ddossot/clatch.svg)](https://travis-ci.org/ddossot/clatch)
+
 # Clatch
 
 A Clojure-powered [Scratch](https://scratch.mit.edu/), built on top of [play-clj](https://github.com/oakes/play-clj).

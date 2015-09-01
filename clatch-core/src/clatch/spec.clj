@@ -3,7 +3,7 @@
 
 (def Backdrops
   [(s/one (s/eq 'backdrops) "backdrops")
-   (s/either s/Keyword s/Str)])
+   (s/cond-pre s/Keyword s/Str)])
 
 (def Script
   [(s/one (s/enum

@@ -16,7 +16,7 @@
    [org.clojure/clojure :clj-version]
 
    [play-clj "0.4.7" :exclusions [com.badlogicgames.gdx/gdx]]
-   [prismatic/schema "0.4.3"]
+   [prismatic/schema "1.0.0"]
    [manifold "0.1.1-alpha3"]
    [potemkin "0.4.1"]
   ])
